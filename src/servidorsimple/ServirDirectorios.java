@@ -168,7 +168,7 @@ public class ServirDirectorios extends Thread {
                                 out.write(("Error" + "\n").getBytes(Charset.forName("UTF-8")));
                             } else {
                                 gui.out("[PLAY] Reproduciendo " + file);
-
+                                System.out.println("Parseint: " + Integer.parseInt(msg.split("\"")[1]));
                                 ma.selectSong(Integer.parseInt(msg.split("\"")[1]));
 
                                 out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
@@ -266,24 +266,24 @@ public class ServirDirectorios extends Thread {
                         }
                         break;
 
+                    case "next":
+                        gui.out("[NEXT] Reproduciendo la siguiente canción.");
+                        ma.next();
+                        out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
+                        break;
+
                     default:
                         out.write((NOK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
                 }
 
-//                if (ma != null) {
-//                    if (!ma.isAlive()) {
-//                        ma = null;
-//                    }
-//                }
             }
-
-
-
 
             sck.close();
             socket.close();
-            ma.kill();
+            if (ma != null) {
+                ma.kill();
+            }
 
 
         } catch (IOException ex) {
@@ -292,17 +292,17 @@ public class ServirDirectorios extends Thread {
         }
 
     }
-    
-    public void initUDPBroadcast(){
-        if(udp==null){
-            udp= new  UDPBroadcast();
+
+    public void initUDPBroadcast() {
+        if (udp == null) {
+            udp = new UDPBroadcast();
             udp.start();
             gui.out("[UDP] Iniciada la escucha de Conexiones Directas.");
         }
     }
-    
-    public void stopUDPBroadcast(){
-        if(udp!=null){
+
+    public void stopUDPBroadcast() {
+        if (udp != null) {
             udp.stopListening();
             System.out.println("StopUDP" + udp);
             udp = null;
