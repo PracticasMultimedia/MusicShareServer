@@ -297,7 +297,7 @@ public class ServirDirectorios extends Thread {
         if(udp==null){
             udp= new  UDPBroadcast();
             udp.start();
-            gui.out("[UDP] Inidiada la escucha de Conexiones Directas.");
+            gui.out("[UDP] Iniciada la escucha de Conexiones Directas.");
         }
     }
     

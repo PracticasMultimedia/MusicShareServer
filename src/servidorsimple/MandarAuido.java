@@ -82,9 +82,9 @@ public class MandarAuido extends Thread {
 
     public void deleteSong(int song) {
 
-        
+
         songList.remove(song);
-        continuar=false;
+        continuar = false;
 
 
     }
@@ -116,33 +116,37 @@ public class MandarAuido extends Thread {
         }
 
     }
-    
-    public void next(){
-        
+
+    public void next() {
+
         indice++;
-        continuar=false;
-    
+        continuar = false;
+
     }
-    
-    public void previous(){
-        
-       indice--; 
-       continuar=false;
-        
+
+    public void previous() {
+
+        //ahora indice apunta a la siguiente cancion;
+        indice--;//ahora apunta a la actual
+        indice--;//ahora apunta a la anterior
+        indice = indice < 0 ? 0 : indice;//comprobamos que no se haya pasado de 0
+
+        continuar = false;//detenemos la canción actual
+
     }
 
     public String getSongName(int i) {
 
-        if(i<0 || i>=songList.size()){
+        if (i < 0 || i >= songList.size()) {
             return null;
         }
-        
+
         return songList.get(i);
 
     }
 
     private String getNextSong() {
-        
+
         int ret;
         //Para forzar la reproduccion de una cancion de la lista
         if (sigForzada != null) {
@@ -455,9 +459,9 @@ public class MandarAuido extends Thread {
     }
 
     void selectSong(int i) {
-        
-        sigForzada=i;
-        continuar=false;        
-        
+
+        sigForzada = i;
+        continuar = false;
+
     }
 }
