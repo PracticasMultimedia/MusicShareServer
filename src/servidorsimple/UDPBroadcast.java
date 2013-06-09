@@ -9,25 +9,34 @@ import java.net.DatagramSocket;
 import java.net.InetAddress;
 
 /**
+ * Clase que lanza un servidor udp que escucha conexiones en el puerto 9876 y
+ * devuelve la ip del servidor de música
  *
- * @author Jesus
+ * @author Jesus Adrian
  */
-//Servidor
 public class UDPBroadcast extends Thread {
 
     private boolean listen;
 
+    /**
+     * Constructor que lanza el servidor
+     */
     @Override
     public void run() {
         listen = true;
         listen();
     }
 
+    /**
+     * Método principal de la clase que lanza el servidor, hasta que se le
+     * indica con la funcion stopListening
+     */
     private void listen() {
         try {
             DatagramSocket sckServidor = new DatagramSocket(9876);
             byte[] datosRecibidos = new byte[1024];
             byte[] datosEnvio = new byte[1024];
+            
             while (listen) {
                 DatagramPacket pckRecibido = new DatagramPacket(datosRecibidos, datosRecibidos.length);
                 System.out.println("esperando paquetes <-");
@@ -36,17 +45,23 @@ public class UDPBroadcast extends Thread {
                 System.out.println("RECEIVED: " + mensaje);
                 InetAddress IPAddress = pckRecibido.getAddress();
                 int port = pckRecibido.getPort();
+                
                 if (mensaje.trim().equals("MENSAJE PARA CONEXION DIRECTA")) {
                     datosEnvio = "CONEXION DIRECTA DISPONIBLE".getBytes();
                     DatagramPacket sendPacket =
                             new DatagramPacket(datosEnvio, datosEnvio.length, IPAddress, port);
                     sckServidor.send(sendPacket);
                 }
+                
             }
+            
         } catch (Exception ex) {
         }
     }
-
+    
+    /**
+     * Método para parar la escucha del servidor udp
+     */
     public void stopListening() {
         listen = false;
     }
