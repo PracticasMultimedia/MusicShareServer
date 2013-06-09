@@ -10,8 +10,8 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 /**
- *
- * @author macosx
+ * Clase que lanza el servidor de musica
+ * @author Jesus Adrian
  */
 public class main {
 
@@ -20,6 +20,7 @@ public class main {
      */
     public static void main(String[] args) {
 
+        //Comprueba si esta instalado el Look and Feel Nimbus, y si esta lo aplica
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -29,6 +30,8 @@ public class main {
             }
         } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException ex) {
         }
+        
+        //Lanzamos el servidor
         Servidor_Interfaz gui = new Servidor_Interfaz();
         gui.setVisible(true);
 
