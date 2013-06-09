@@ -47,7 +47,7 @@ public class MandarAuido extends Thread {
         shuffle = false;
         salir = false;
         continuar = true;
- 
+
     }
 
     /**
@@ -59,15 +59,13 @@ public class MandarAuido extends Thread {
 
 
         deleteListSong();
-        indice=0;
-        
+        indice = 0;
+
         songList.add(song);
-        
+
         continuar = false;
 
-        boolean aux = false;
-
-        aux = stopped;
+        boolean aux = stopped;
 
         if (aux) {
             sem.SIGNAL();
@@ -130,10 +128,7 @@ public class MandarAuido extends Thread {
         songList.add(file);
         continuar = true;
 
-        boolean aux = false;
-
-
-        aux = stopped;
+        boolean aux = stopped;
 
         if (aux) {
             sem.SIGNAL();
@@ -189,8 +184,8 @@ public class MandarAuido extends Thread {
     private String getNextSong() {
 
         int ret;
-        
-        if (songList.size() == 0) {
+
+        if (songList.isEmpty()) {
 
             return null;
 
@@ -230,14 +225,13 @@ public class MandarAuido extends Thread {
     }
 
     /**
-     * 
+     * Manda la orden la hilo reproductor para que se cierre de forma correcta
      */
     public void kill() {
         continuar = false;
         salir = true;
 
-        boolean aux = false;
-        aux = stopped;
+        boolean aux = stopped;
 
 
         if (aux) {
@@ -246,13 +240,36 @@ public class MandarAuido extends Thread {
 
     }
 
+    /**
+     * Manda la orden al reproductor de que deje de reproducir
+     */
     public void stop_() {
 
         continuar = false;
-        stop=true;
+        stop = true;
     }
 
-    //SERVIDOR
+    /**
+     * Obliga a reproducir una canción de la lista
+     *
+     * @param i Indice de la cancion
+     */
+    void selectSong(int i) {
+
+        indice = i;
+        continuar = false;
+
+        boolean aux = stopped;
+
+        if (aux) {
+            sem.SIGNAL();
+        }
+
+    }
+
+    /**
+     * Comportamiento del hilo reproductor. Clase heredada de la clase Thread
+     */
     @Override
     public void run() {
 
@@ -292,17 +309,17 @@ public class MandarAuido extends Thread {
             System.out.println("Confirmando conexion al cliente....");
 
             while (salir == false) {
-                
-                if(stop){
-                    stop=false;
+
+                if (stop) {
+                    stop = false;
                     stopped = true;
 
                     sem.WAIT();
                 }
-                
-                
+
+
                 String newSong = getNextSong();
-                
+
                 if (newSong != null) {
 
                     System.out.println("Reproduciendo: " + newSong);
@@ -361,9 +378,9 @@ public class MandarAuido extends Thread {
                      * packet.
                      */
                     IPacket packet = IPacket.make();
-                    
-                    continuar=true;
-                    
+
+                    continuar = true;
+
                     while (container.readNextPacket(packet) >= 0 && continuar) {
                         /*
                          * Now we have a packet, let's see if it belongs to our audio
@@ -500,22 +517,6 @@ public class MandarAuido extends Thread {
 
             System.out.println("Error: " + e.getMessage());
 
-        }
-
-    }
-
-    void selectSong(int i) {
-
-        indice = i;
-        continuar = false;
-        
-        boolean aux = false;
-
-
-        aux = stopped;
-
-        if (aux) {
-            sem.SIGNAL();
         }
 
     }
