@@ -7,7 +7,7 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import servidorsimple.FileSystem;
-import servidorsimple.ServirDirectorios;
+import servidorsimple.Connect;
 
 /*
  * To change this template, choose Tools | Templates
@@ -20,7 +20,7 @@ import servidorsimple.ServirDirectorios;
 public class Servidor_Interfaz extends javax.swing.JFrame {
 
     String path;
-    ServirDirectorios sd;
+    Connect sd;
 
     /**
      * Creates new form Servidor_Interfaz
@@ -204,7 +204,7 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
             //info.setText("Ruta base: " + path);
             if (sd == null) {
                 try {
-                    sd = new ServirDirectorios(path, this);
+                    sd = new Connect(path, this);
                     sd.start();
                     out("Creado en servidor...");
                 } catch (Exception e) {

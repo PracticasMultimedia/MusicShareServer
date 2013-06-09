@@ -14,7 +14,7 @@ import semaforo.SemaforoBinario;
  *
  * @author Jorge V
  */
-public class MandarAuido extends Thread {
+public class SoundSender extends Thread {
 
     semaforo.SemaforoBinario sem = new SemaforoBinario(0);
     final int PUERTO_CONTROL = 5001;
@@ -41,7 +41,7 @@ public class MandarAuido extends Thread {
     /**
      * Constructor por defecto
      */
-    public MandarAuido() {
+    public SoundSender() {
 
         songList = new ArrayList<>();
         indice = 0;

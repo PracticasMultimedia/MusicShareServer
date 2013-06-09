@@ -21,7 +21,7 @@ import java.nio.charset.Charset;
  *
  * @author Adrian Jesus
  */
-public class ServirDirectorios extends Thread {
+public class Connect extends Thread {
 
     static final String OK = "Successful";
     static final String NOK = "Not Understood";
@@ -31,7 +31,7 @@ public class ServirDirectorios extends Thread {
     Socket sck;
     DataOutputStream out;
     String nombre = InetAddress.getLocalHost().getHostName();
-    MandarAuido ma = null;
+    SoundSender ma = null;
     String path;
     Servidor_Interfaz gui;
     UDPBroadcast udp;
@@ -43,7 +43,7 @@ public class ServirDirectorios extends Thread {
      * @param _gui interfaz del servidor
      * @throws IOException
      */
-    public ServirDirectorios(String _path, Servidor_Interfaz _gui) throws IOException {
+    public Connect(String _path, Servidor_Interfaz _gui) throws IOException {
         path = _path;
         gui = _gui;
         udp = null;
@@ -77,7 +77,7 @@ public class ServirDirectorios extends Thread {
         try {
 
             //Creamos y lanzamos el hilo reproductor
-            ma = new MandarAuido();
+            ma = new SoundSender();
             ma.start();
             /**
              * Creamos las variables que vamos a necesitar.
