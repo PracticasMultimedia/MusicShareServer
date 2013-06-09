@@ -140,9 +140,30 @@ public class MandarAuido extends Thread {
      * Reproduce la siguiente cancion
      */
     public void next() {
+        
+        if (shuffle == true) {
+            
+            continuar = false;
+            
+        } else {
+            
+            indice--;//ahora apunta a la actual
 
-        continuar = false;
+            if (indice == songList.size() - 1) {
 
+                if (loop == true) {
+                    indice = 0;
+                    continuar = false;//detenemos la canción actual
+                } else {
+                    indice++;//al estar el indice fuera de rango parara la reproduccion al terminar la cancion
+                }
+
+            } else {
+
+                indice++;//ahora apunta a la siguiente
+                continuar = false;//detenemos la canción actual
+            }
+        }
     }
 
     /**
@@ -150,13 +171,26 @@ public class MandarAuido extends Thread {
      */
     public void previous() {
 
-        //ahora indice apunta a la siguiente cancion;
-        indice--;//ahora apunta a la actual
-        indice--;//ahora apunta a la anterior
-        indice = indice < 0 ? 0 : indice;//comprobamos que no se haya pasado de 0
+        if (shuffle == true) {
+            continuar = false;
+        } else {
+            indice--;//ahora apunta a la actual
 
-        continuar = false;//detenemos la canción actual
+            if (indice == 0) {
 
+                if (loop == true) {
+                    indice = songList.size() - 1;
+                    continuar = false;//detenemos la canción actual
+                } else {
+                    indice++;//continuara la siguiente canción
+                }
+
+            } else {
+
+                indice--;//ahora apunta a la anterior
+                continuar = false;//detenemos la canción actual
+            }
+        }
     }
 
     /**

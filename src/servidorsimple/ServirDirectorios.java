@@ -180,10 +180,10 @@ public class ServirDirectorios extends Thread {
                         break;
 
                     case "stop":
-                        if (ma != null) {
-                            ma.stop_();
-                            ma = null;
-                        }
+
+                        ma.stop_();
+
+
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
@@ -275,7 +275,7 @@ public class ServirDirectorios extends Thread {
                         ma.previous();
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
-                        
+
                     default:
                         out.write((NOK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;

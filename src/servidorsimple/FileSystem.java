@@ -6,8 +6,9 @@ import java.util.ArrayList;
 import javax.print.DocFlavor;
 
 /**
+ * Clase que mantiene la lógica de la clase a nivel de explorador de ficheros
  *
- * @author JesÃºs
+ * @author Jesus Adrian
  */
 public class FileSystem {
 
@@ -18,33 +19,70 @@ public class FileSystem {
     File path;
     File deepestPath;
 
+    /**
+     * Constructor que asigna la ruta como ruta por defecto, y como ruta mas
+     * profunda accesible
+     *
+     * @param initPath Ruta inicial
+     */
     public FileSystem(String initPath) {
         path = new File(initPath);
         deepestPath = new File(initPath);
     }
 
+    /**
+     * Constructor que asigna la ruta como ruta por defecto, y como ruta mas
+     * profunda accesible
+     *
+     * @param initPath Ruta inicial
+     */
     public FileSystem(File initPath) {
         path = initPath;
         deepestPath = initPath;
     }
 
+    /**
+     * Método que devuelve la ruta absoluta de la ruta actual
+     *
+     * @return ruta actual en cadena de carateres
+     */
     public String getAbsolutePath() {
         return path.getAbsolutePath();
     }
 
+    /**
+     * Método que devuelve la ruta absoluta de la ruta actual
+     *
+     * @return ruta actual en cadena de caracteres
+     */
     public String getAbsolutePath(String child) {
         File temp = new File(path.getAbsolutePath(), child);
         return temp.getAbsolutePath();
     }
 
+    /**
+     * Método que devuelve la ruta padre de la ruta actual, un nivel mas alto
+     *
+     * @return ruta padre de la actual en cadena de carateres
+     */
     public String getParent() {
         return path.getParent();
     }
 
+    /**
+     * Método que devuelve la ruta actual
+     *
+     * @return ruta actual en cadena de carateres
+     */
     public String getPath() {
         return path.getPath();
     }
 
+    /**
+     * Método que devuelve la ruta en formato URI de la ruta actual
+     *
+     * @return ruta actual en modo URI
+     */
     public URI toUri() {
         return path.toURI();
     }
@@ -105,6 +143,12 @@ public class FileSystem {
         return childs;
     }
 
+    /**
+     * Método que devuelve todas los ficheros, de forma recursiva, a partir de
+     * una ruta
+     *
+     * @return Lista de todos los ficheros
+     */
     public ArrayList<String> dirFilesRecursive() {
         File p = deepestPath;
         ArrayList<String> f = new ArrayList<>();
@@ -123,11 +167,17 @@ public class FileSystem {
         }
         return f;
     }
-    
-    public ArrayList<String> dirMusicRecursive(){
+
+    /**
+     * Método que devuelve todas los ficheros mp3, de forma recursiva, a partir de
+     * una ruta
+     *
+     * @return Lista de todos los ficheros mp3
+     */
+    public ArrayList<String> dirMusicRecursive() {
         ArrayList<String> f = new ArrayList<>();
-        for(String s : dirFilesRecursive()){
-            if(s.endsWith(".mp3")){
+        for (String s : dirFilesRecursive()) {
+            if (s.endsWith(".mp3")) {
                 f.add(s);
             }
         }
