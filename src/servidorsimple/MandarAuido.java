@@ -9,11 +9,9 @@ import java.util.ArrayList;
 import semaforo.SemaforoBinario;
 
 /**
- *
- *
+ * Clase hilo que mantiene el servidor de datos y de control de la música
  *
  * @author Jorge V
- *
  */
 public class MandarAuido extends Thread {
 
@@ -36,8 +34,11 @@ public class MandarAuido extends Thread {
     boolean shuffle;
     boolean salir;
     boolean stopped;
-    Integer sigForzada;
+    boolean stop;
 
+    /**
+     * Constructor por defecto
+     */
     public MandarAuido() {
 
         songList = new ArrayList<>();
@@ -46,24 +47,27 @@ public class MandarAuido extends Thread {
         shuffle = false;
         salir = false;
         continuar = true;
-        sigForzada = null;
-
+ 
     }
 
+    /**
+     * Método que elimina la lista de canciones y añade la que se le indica
+     *
+     * @param song Cancion a reproducir cuando se elimine la lista
+     */
     public void play(String song) {
 
 
         deleteListSong();
-
+        indice=0;
+        
         songList.add(song);
-        continuar = true;
+        
+        continuar = false;
 
         boolean aux = false;
 
-
-
         aux = stopped;
-
 
         if (aux) {
             sem.SIGNAL();
@@ -72,35 +76,55 @@ public class MandarAuido extends Thread {
 
     }
 
+    /**
+     * Método que para la reproduccion y elimina la lista de canciones
+     */
     public void deleteListSong() {
 
-        continuar = false;
         indice = 0;
         songList.clear();
-
-    }
-
-    public void deleteSong(int song) {
-
-
-        songList.remove(song);
         continuar = false;
 
+    }
+
+    /**
+     * Elimina una canción de la lista
+     *
+     * @param song ruta de la canción a eliminar
+     */
+    public void deleteSong(int song) {
+
+        songList.remove(song);
 
     }
 
+    /**
+     * Indica si se quiere poner la reproduccion en modo continuo
+     *
+     * @param b boolean que indica el estado que se tiene que poner
+     */
     public void setLoop(boolean b) {
 
         loop = b;
 
     }
 
+    /**
+     * Indica si se quiere poner la reproduccion en modo aleatorio
+     *
+     * @param b boolean que indica el estado que se tiene que poner
+     */
     public void setShuffle(boolean b) {
 
         shuffle = b;
 
     }
 
+    /**
+     * Añade la cancion a la lista
+     *
+     * @param file ruta de la cancion
+     */
     public void addSong(String file) {
 
         songList.add(file);
@@ -117,13 +141,18 @@ public class MandarAuido extends Thread {
 
     }
 
+    /**
+     * Reproduce la siguiente cancion
+     */
     public void next() {
 
-        indice++;
         continuar = false;
 
     }
 
+    /**
+     * Reproduce la canción anterior
+     */
     public void previous() {
 
         //ahora indice apunta a la siguiente cancion;
@@ -135,6 +164,12 @@ public class MandarAuido extends Thread {
 
     }
 
+    /**
+     * Devuelve el nombre de una cancion de la lista, a partir de un índice
+     *
+     * @param i indice de la cancion
+     * @return nombre de la cancion
+     */
     public String getSongName(int i) {
 
         if (i < 0 || i >= songList.size()) {
@@ -145,20 +180,16 @@ public class MandarAuido extends Thread {
 
     }
 
+    /**
+     * Método que es llamado por el método de reproduccion para que le devuelva
+     * la siguiente canción para reproducir
+     *
+     * @return ruta de la siguiente cancion o nulo si no hay mas que reproducie
+     */
     private String getNextSong() {
 
         int ret;
-        //Para forzar la reproduccion de una cancion de la lista
-        if (sigForzada != null) {
-
-            ret = sigForzada;
-            sigForzada = null;
-
-            return songList.get(ret);
-
-        }
-
-
+        
         if (songList.size() == 0) {
 
             return null;
@@ -198,6 +229,9 @@ public class MandarAuido extends Thread {
 
     }
 
+    /**
+     * 
+     */
     public void kill() {
         continuar = false;
         salir = true;
@@ -215,6 +249,7 @@ public class MandarAuido extends Thread {
     public void stop_() {
 
         continuar = false;
+        stop=true;
     }
 
     //SERVIDOR
@@ -257,9 +292,17 @@ public class MandarAuido extends Thread {
             System.out.println("Confirmando conexion al cliente....");
 
             while (salir == false) {
+                
+                if(stop){
+                    stop=false;
+                    stopped = true;
 
+                    sem.WAIT();
+                }
+                
+                
                 String newSong = getNextSong();
-
+                
                 if (newSong != null) {
 
                     System.out.println("Reproduciendo: " + newSong);
@@ -318,6 +361,9 @@ public class MandarAuido extends Thread {
                      * packet.
                      */
                     IPacket packet = IPacket.make();
+                    
+                    continuar=true;
+                    
                     while (container.readNextPacket(packet) >= 0 && continuar) {
                         /*
                          * Now we have a packet, let's see if it belongs to our audio
@@ -460,8 +506,17 @@ public class MandarAuido extends Thread {
 
     void selectSong(int i) {
 
-        sigForzada = i;
+        indice = i;
         continuar = false;
+        
+        boolean aux = false;
+
+
+        aux = stopped;
+
+        if (aux) {
+            sem.SIGNAL();
+        }
 
     }
 }
