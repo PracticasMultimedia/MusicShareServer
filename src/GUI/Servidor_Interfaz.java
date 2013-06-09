@@ -15,7 +15,7 @@ import servidorsimple.ServirDirectorios;
  */
 /**
  *
- * @author DSDG
+ * @author Adrian Jesus
  */
 public class Servidor_Interfaz extends javax.swing.JFrame {
 
@@ -189,6 +189,12 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    /**
+     * Metodo que lanza un dialog para seleccionar la ruta base y lanza el
+     * servidor
+     *
+     * @param evt informacion sobre el evento que llamo a este método
+     */
     private void elegirbtnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_elegirbtnActionPerformed
         // TODO add your handling code here:
         int sel = elegirRutaBase.showOpenDialog(this);
@@ -207,19 +213,23 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
                 sd.setPath(path);
             }
             udpconnect.setEnabled(true);
-            
+
         }
     }//GEN-LAST:event_elegirbtnActionPerformed
 
     private void udpconnectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_udpconnectActionPerformed
-        // TODO add your handling code here:
-        if(udpconnect.isSelected()){
+        //lanzamos o paramos el servidor udp
+        if (udpconnect.isSelected()) {
             sd.initUDPBroadcast();
-        }else{
+        } else {
             sd.stopUDPBroadcast();
         }
     }//GEN-LAST:event_udpconnectActionPerformed
 
+    /**
+     * Muestra información sobre la selección de ruta base.
+     * @param evt 
+     */
     private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this , "<html><justify>"
@@ -234,6 +244,10 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
                 + "al Cliente.</justify></html>", "Información", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jLabel3MouseClicked
 
+    /**
+     * Muestra información sobre la conexión directa.
+     * @param evt 
+     */
     private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
         // TODO add your handling code here:
         JOptionPane.showMessageDialog(this, "<html>"
@@ -246,6 +260,11 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
                 + "</html>", "Información", JOptionPane.INFORMATION_MESSAGE);
     }//GEN-LAST:event_jLabel4MouseClicked
 
+    /**
+     * Este método esta para simplificar la impresion por consola
+     *
+     * @param s string para imprimir
+     */
     public void out(String s) {
         cmd.insert(s + "\n", cmd.getText().length());
     }
