@@ -179,8 +179,6 @@ public class ServirDirectorios extends Thread {
 
                         break;
 
-
-
                     case "stop":
                         if (ma != null) {
                             ma.stop_();
@@ -272,6 +270,12 @@ public class ServirDirectorios extends Thread {
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
+                    case "prev":
+                        gui.out("[PREV] Reproduciendo la canción anterior.");
+                        ma.previous();
+                        out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
+                        break;
+                        
                     default:
                         out.write((NOK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
