@@ -30,6 +30,7 @@ public class MandarAuido extends Thread {
     ArrayList<String> songList;
     boolean continuar;
     int indice;
+    Integer cancionforzada;
     boolean loop;
     boolean shuffle;
     boolean salir;
@@ -47,6 +48,7 @@ public class MandarAuido extends Thread {
         shuffle = false;
         salir = false;
         continuar = true;
+        cancionforzada = null;
 
     }
 
@@ -63,8 +65,10 @@ public class MandarAuido extends Thread {
 
         songList.add(song);
 
+        //Obligamos a detener la cancion actual
         continuar = false;
 
+        //en el caso de que la reproduccion este parada, se reanuda
         boolean aux = stopped;
 
         if (aux) {
@@ -79,8 +83,10 @@ public class MandarAuido extends Thread {
      */
     public void deleteListSong() {
 
+        //borramos la lista
         indice = 0;
         songList.clear();
+        //detenemos la reproduccion actual
         continuar = false;
 
     }
@@ -126,8 +132,8 @@ public class MandarAuido extends Thread {
     public void addSong(String file) {
 
         songList.add(file);
-        continuar = true;
 
+        //en el caso de que la reproduccion este parada, se reanuda
         boolean aux = stopped;
 
         if (aux) {
@@ -140,25 +146,25 @@ public class MandarAuido extends Thread {
      * Reproduce la siguiente cancion
      */
     public void next() {
-        
+
         if (shuffle == true) {
-            
-            continuar = false;
-            
+
+            continuar = false;//como esta en aleatorio pasamos a otra cancion
+
         } else {
-            
+
             indice--;//ahora apunta a la actual
 
-            if (indice == songList.size() - 1) {
+            if (indice == songList.size() - 1) {//si estamos en la última cancion
 
-                if (loop == true) {
+                if (loop == true) {//esta activada la repeticion de la lista
                     indice = 0;
                     continuar = false;//detenemos la canción actual
-                } else {
+                } else {//no esta activada la repeticion de la lista
                     indice++;//al estar el indice fuera de rango parara la reproduccion al terminar la cancion
                 }
 
-            } else {
+            } else {//no estamos en la última cancion
 
                 indice++;//ahora apunta a la siguiente
                 continuar = false;//detenemos la canción actual
@@ -172,20 +178,22 @@ public class MandarAuido extends Thread {
     public void previous() {
 
         if (shuffle == true) {
-            continuar = false;
+
+            continuar = false; //como esta en aleatorio pasamos a otra cancion
+
         } else {
             indice--;//ahora apunta a la actual
 
-            if (indice == 0) {
+            if (indice == 0) {//si estamos en la primera cancion
 
-                if (loop == true) {
+                if (loop == true) {//esta activada la repeticion de la lista
                     indice = songList.size() - 1;
                     continuar = false;//detenemos la canción actual
-                } else {
+                } else {//no esta activada la repeticion de la lista
                     indice++;//continuara la siguiente canción
                 }
 
-            } else {
+            } else {//estamos en cualquier otra cancion de la lista
 
                 indice--;//ahora apunta a la anterior
                 continuar = false;//detenemos la canción actual
@@ -219,31 +227,40 @@ public class MandarAuido extends Thread {
 
         int ret;
 
+        if (cancionforzada != null) {
+            //si queremos reproducir una cancion en concreto de la lista y tenemos el aleatorio marcado
+            ret = cancionforzada;
+            cancionforzada = null;
+
+            return songList.get(ret);
+        }
+
         if (songList.isEmpty()) {
+            //lista vacia 
 
             return null;
 
         } else if (loop == false && shuffle == false) {
-
+            //esta desactivada la opcion de repetir y aleatoria
             if (indice >= songList.size()) {
-
+                //hemos llegado al final de la lista
                 return null;
 
             } else {
-
+                //caso normal
                 ret = indice;
                 indice++;
                 return songList.get(ret);
             }
 
         } else if (shuffle == true) {
-
+            //esta activada la reproduccion aleatoria
             int i = (int) Math.random() % songList.size();
             indice = i;
             return songList.get(indice);
 
         } else {
-
+            //esta activada la repeticion de la lista
             if (indice >= songList.size()) {
 
                 indice = indice % songList.size();
@@ -262,9 +279,12 @@ public class MandarAuido extends Thread {
      * Manda la orden la hilo reproductor para que se cierre de forma correcta
      */
     public void kill() {
+
+        //obliga a salir de los bucles de reproduccion
         continuar = false;
         salir = true;
 
+        //si esta parado se obliga a dar una vuelta mas al bucle para salir
         boolean aux = stopped;
 
 
@@ -290,9 +310,13 @@ public class MandarAuido extends Thread {
      */
     void selectSong(int i) {
 
+        cancionforzada = i;
         indice = i;
+
+        //paramos la cancion actual
         continuar = false;
 
+        //si el servidor esta parado, se reactiva
         boolean aux = stopped;
 
         if (aux) {
@@ -308,8 +332,6 @@ public class MandarAuido extends Thread {
     public void run() {
 
         BufferedReader entrada;
-
-
 
         try {
 
@@ -344,6 +366,7 @@ public class MandarAuido extends Thread {
 
             while (salir == false) {
 
+                //si nos mandan un stop nos detenemos aqui
                 if (stop) {
                     stop = false;
                     stopped = true;
@@ -351,9 +374,10 @@ public class MandarAuido extends Thread {
                     sem.WAIT();
                 }
 
-
+                //consulata la siguiente cancion
                 String newSong = getNextSong();
 
+                //si es nula detemos la reproduccion
                 if (newSong != null) {
 
                     System.out.println("Reproduciendo: " + newSong);
@@ -396,11 +420,10 @@ public class MandarAuido extends Thread {
                         throw new RuntimeException("could not open audio decoder for container: " + songList);
                     }
 
-                    /*
-                     * And once we have that, we ask the Java Sound System to get itself
-                     * ready.
-                     */
 
+                    /*
+                     * Mandamos los parametros de la cancion al cliente para que pueda reproducirla, nombre, frecuencia, canales y los bits por muestra
+                     */
                     out_control.write(((-1) + "\n").getBytes(Charset.forName("UTF-8")));
                     out_control.write(((newSong) + "\n").getBytes(Charset.forName("UTF-8")));
                     out_control.write(((audioCoder.getSampleRate()) + "\n").getBytes(Charset.forName("UTF-8")));
@@ -459,11 +482,13 @@ public class MandarAuido extends Thread {
 
                                 if (samples.isComplete()) {
 
+                                    //aqui hacemos la transformada rápida de fourier fft, para poder mostrar la barra del ecualizador
                                     int n = (int) samples.getNumSamples();
 
                                     float[] samp = new float[1024];
                                     float[] bandas = new float[7];
 
+                                    //al final de la cancion no estaran las 1024 muestras
                                     n = Math.min(n, 1024);
 
                                     for (int i = 0; i < n; i++) {
@@ -472,12 +497,14 @@ public class MandarAuido extends Thread {
 
                                     }
 
-
+                                    //Hacemos la fft
                                     FFT fft = new FFT(samp.length, (float) audioCoder.getSampleRate());
                                     fft.forward(samp);
 
+                                    //vamos a dividir los coeficientes en 14 grupos
                                     int corte = fft.specSize() / 14;
 
+                                    //solo usamos los primeros 7 grupos, ya que los demas no tienen informacion que nos interese
                                     for (int i = 0; i < 7; i++) {
                                         for (int j = 0; j < corte; j++) {
                                             bandas[i] = Math.abs(fft.getBand(i * corte + j));
@@ -486,13 +513,14 @@ public class MandarAuido extends Thread {
 
                                     String bandasString = "";
 
+                                    //mandamos los coeficientes como cadena de caracteres con ";" como separador
                                     for (int i = 0; i < bandas.length; i++) {
 
                                         bandasString += bandas[i] + ";";
 
                                     }
 
-
+                                    //enviamos el tamaño del paquete, los coeficientes de fft y los datos en bruto de audio
                                     out_control.write((samples.getSize() + "\n").getBytes(Charset.forName("UTF-8")));
                                     out_control.write((bandasString + "\n").getBytes(Charset.forName("UTF-8")));
                                     out_datos.write(samples.getData().getByteArray(0, samples.getSize()));
@@ -505,7 +533,7 @@ public class MandarAuido extends Thread {
                     }
 
 
-
+                    //eliminamos las variables temporales
                     if (audioCoder != null) {
                         audioCoder.close();
                         audioCoder = null;
@@ -514,14 +542,9 @@ public class MandarAuido extends Thread {
                         container.close();
                         container = null;
                     }
-                    /*
-                     * Technically since we're exiting anyway, these will be cleaned up
-                     * by the garbage collector... but because we're nice people and
-                     * want to be invited places for Christmas, we're going to show how
-                     * to clean up.
-                     */
-                } else {
 
+                } else {
+                    //si no tenemos mas canciones que reproducir nos bloqueamos por semaforo
 
                     stopped = true;
 
@@ -530,6 +553,8 @@ public class MandarAuido extends Thread {
                 }
 
             }
+
+            //Cuando terminamos la conexion principal tambien cerramos esta
             out_control.write("0\n".getBytes(Charset.forName("UTF-8")));
 
 
