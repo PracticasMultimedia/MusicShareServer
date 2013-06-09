@@ -4,6 +4,7 @@ import java.awt.Image;
 import java.io.IOException;
 import javax.imageio.ImageIO;
 import javax.swing.JFileChooser;
+import javax.swing.JOptionPane;
 import javax.swing.UIManager;
 import servidorsimple.FileSystem;
 import servidorsimple.ServirDirectorios;
@@ -48,21 +49,24 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
         elegirRutaBase = new javax.swing.JFileChooser();
         jScrollPane1 = new javax.swing.JScrollPane();
         cmd = new javax.swing.JTextArea();
-        info = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
         elegirbtn = new javax.swing.JButton();
-        jSeparator1 = new javax.swing.JSeparator();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         udpconnect = new javax.swing.JToggleButton();
+        jLabel4 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Servidor de Música");
+        setTitle("Music Share Server");
 
         cmd.setColumns(20);
         cmd.setFont(new java.awt.Font("Arial", 0, 12)); // NOI18N
         cmd.setRows(5);
         jScrollPane1.setViewportView(cmd);
 
-        info.setText("Hasta que no se seleccione una ruta base, el servidor no se iniciará...");
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(128, 128, 128), 1, true), "Selección de Ruta Base"));
 
         elegirbtn.setText("Elegir ruta base");
         elegirbtn.addActionListener(new java.awt.event.ActionListener() {
@@ -70,6 +74,47 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
                 elegirbtnActionPerformed(evt);
             }
         });
+
+        jLabel2.setText("<html>\nLa selección de su Ruta Base es imprescindible para el correcto funcionamiento de la aplicación. Debe seleccionar una carpeta para que el servidor se ponga en marcha.\n</html>");
+
+        jLabel3.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/info.png"))); // NOI18N
+        jLabel3.setText("<html>\n<a href=\"\"> ¿Por qué?</a>\n</html>");
+        jLabel3.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel3MouseClicked(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .add(elegirbtn, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 146, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE))
+                    .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jLabel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, 38, Short.MAX_VALUE)
+                        .add(elegirbtn))
+                    .add(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                        .add(jLabel3, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)))
+                .add(6, 6, 6))
+        );
+
+        jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(new javax.swing.border.LineBorder(new java.awt.Color(128, 128, 128), 1, true), "Conexión Directa "));
 
         jLabel1.setText("<html>Para permitir la conexión directa de un usuario a través de UDP active el botón:</html>");
 
@@ -81,6 +126,42 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
             }
         });
 
+        jLabel4.setIcon(new javax.swing.ImageIcon(getClass().getResource("/images/info.png"))); // NOI18N
+        jLabel4.setText("<html> <a href=\"\">     ¿Qué es esto?</a> </html>");
+        jLabel4.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jLabel4MouseClicked(evt);
+            }
+        });
+
+        org.jdesktop.layout.GroupLayout jPanel2Layout = new org.jdesktop.layout.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .add(jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+                    .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                    .add(org.jdesktop.layout.GroupLayout.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .add(0, 0, Short.MAX_VALUE)
+                        .add(udpconnect))
+                    .add(jPanel2Layout.createSequentialGroup()
+                        .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 117, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                        .add(0, 0, Short.MAX_VALUE)))
+                .addContainerGap())
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+            .add(jPanel2Layout.createSequentialGroup()
+                .addContainerGap(12, Short.MAX_VALUE)
+                .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jLabel4, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(0, 0, 0)
+                .add(udpconnect)
+                .add(6, 6, 6))
+        );
+
         org.jdesktop.layout.GroupLayout layout = new org.jdesktop.layout.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -88,32 +169,21 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
             .add(layout.createSequentialGroup()
                 .addContainerGap()
                 .add(layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-                    .add(jScrollPane1)
-                    .add(jSeparator1)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, elegirbtn, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(info, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
-                        .add(0, 184, Short.MAX_VALUE)
-                        .add(udpconnect))
-                    .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                    .add(jPanel1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .add(jScrollPane1, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, 337, Short.MAX_VALUE)
+                    .add(jPanel2, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
             .add(org.jdesktop.layout.GroupLayout.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .add(info, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 33, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(elegirbtn)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jSeparator1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 10, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
-                .add(jLabel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .add(udpconnect)
+                .add(jPanel1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(org.jdesktop.layout.LayoutStyle.UNRELATED)
-                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 294, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .add(jPanel2, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(org.jdesktop.layout.LayoutStyle.RELATED)
+                .add(jScrollPane1, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, 255, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+                .add(50, 50, 50))
         );
 
         pack();
@@ -125,7 +195,7 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
         if (sel == JFileChooser.APPROVE_OPTION) {
             path = elegirRutaBase.getSelectedFile().getAbsolutePath();
             out("Se ha establecido la ruta base en: " + path);
-            info.setText("Ruta base: " + path);
+            //info.setText("Ruta base: " + path);
             if (sd == null) {
                 try {
                     sd = new ServirDirectorios(path, this);
@@ -149,6 +219,32 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
             sd.stopUDPBroadcast();
         }
     }//GEN-LAST:event_udpconnectActionPerformed
+
+    private void jLabel3MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel3MouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this , "<html><justify>"
+                + "Para mantener toda la privacidad y seguridad posible,<br>"
+                + "no daremos al cliente de esta aplicación acceso a todos<br>"
+                + "su sistema de archivos, sino que sólamente podrá ver<br>"
+                + "aquellos directorios que cuelguen de la carpeta seleccionada<br>"
+                + "en este paso.<br>"
+                + "Por ello, el servidor no se iniciará hasta que no indique<br>"
+                + "la ruta de su directorio base, ya que, hasta ese momento, la<br>"
+                + "aplicación no sabrá qué directorios y archivos puede mostrar<br>"
+                + "al Cliente.</justify></html>", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jLabel3MouseClicked
+
+    private void jLabel4MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jLabel4MouseClicked
+        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(this, "<html>"
+                + "La conexión directa permitirá al Cliente poder conextarse<br>"
+                + "con el servidor de forma automática, sin tener que conocer<br>"
+                + "la dirección IP del Servidor. Si no conoce este dato, la <br>"
+                + "conexión directa es la forma más sencilla de iniciar el <br>"
+                + "Cliente. Si conoce la dirección IP del Servidor, introducirla<br>"
+                + "manualmente es la forma más segura de establecer la conexión."
+                + "</html>", "Información", JOptionPane.INFORMATION_MESSAGE);
+    }//GEN-LAST:event_jLabel4MouseClicked
 
     public void out(String s) {
         cmd.insert(s + "\n", cmd.getText().length());
@@ -192,10 +288,13 @@ public class Servidor_Interfaz extends javax.swing.JFrame {
     private javax.swing.JTextArea cmd;
     private javax.swing.JFileChooser elegirRutaBase;
     private javax.swing.JButton elegirbtn;
-    private javax.swing.JLabel info;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSeparator jSeparator1;
     private javax.swing.JToggleButton udpconnect;
     // End of variables declaration//GEN-END:variables
 }
