@@ -6,6 +6,7 @@ import java.io.*;
 import java.net.*;
 import java.nio.charset.Charset;
 import java.util.ArrayList;
+import java.util.Random;
 import semaforo.SemaforoBinario;
 
 /**
@@ -255,9 +256,9 @@ public class MandarAuido extends Thread {
 
         } else if (shuffle == true) {
             //esta activada la reproduccion aleatoria
-            int i = (int) Math.random() % songList.size();
-            indice = i;
-            return songList.get(indice);
+            int i = (new Random()).nextInt(songList.size());
+            indice = i + 1;
+            return songList.get(i);
 
         } else {
             //esta activada la repeticion de la lista
