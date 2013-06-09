@@ -16,8 +16,10 @@ import java.net.Socket;
 import java.nio.charset.Charset;
 
 /**
+ * Clase que maneja la conexion principal con el cliente, recibe los comandos y
+ * los procesa. Hereda de la clase Thread
  *
- * @author macosx
+ * @author Adrian Jesus
  */
 public class ServirDirectorios extends Thread {
 
@@ -34,28 +36,47 @@ public class ServirDirectorios extends Thread {
     Servidor_Interfaz gui;
     UDPBroadcast udp;
 
-    public ServirDirectorios() throws IOException {
-    }
-
+    /**
+     * Constructor por defecto de la clase
+     *
+     * @param _path indica el directorio base para el servidor
+     * @param _gui interfaz del servidor
+     * @throws IOException
+     */
     public ServirDirectorios(String _path, Servidor_Interfaz _gui) throws IOException {
         path = _path;
         gui = _gui;
         udp = null;
     }
 
+    /**
+     * Método usado para simplificar la escritura en consola
+     *
+     * @param s string para imprimir por consola
+     */
     private void out(String s) {
         System.out.println(s);
     }
 
+    /**
+     * Modifica el parametro path de la clase
+     *
+     * @param _path nueva ruta base
+     */
     public void setPath(String _path) {
         path = _path;
         fs = new FileSystem(path);
     }
 
+    /**
+     * Comportamiento del hilo, mantiene la conexion de control del servidor y
+     * procesa las peticiones
+     */
     @Override
     public void run() {
         try {
 
+            //Creamos y lanzamos el hilo reproductor
             ma = new MandarAuido();
             ma.start();
             /**
@@ -103,7 +124,7 @@ public class ServirDirectorios extends Thread {
 
 
             /**
-             * Navegación por archivos...
+             * Procesamiento de los mensajes entrantes
              */
             String msg = "";
             while (!msg.equals("exit")) {
@@ -116,7 +137,7 @@ public class ServirDirectorios extends Thread {
 
                 switch (commands[0]) {
 
-                    case "cd":
+                    case "cd"://exploracion de carpetas
                         if (commands.length >= 2) {
                             String file = msg.split("\"")[1];
                             gui.out("[CD] Moviendonos a " + file);
@@ -127,7 +148,7 @@ public class ServirDirectorios extends Thread {
                         out.write(("Error" + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
-                    case "dir":
+                    case "dir"://peticion de archivos y carpetas de la ruta
                         gui.out("[DIR] Listando directorios");
                         for (String file : fs.dir()) {
                             out.write((file + "\n").getBytes(Charset.forName("UTF-8")));
@@ -136,7 +157,7 @@ public class ServirDirectorios extends Thread {
                         out.write((".." + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
-                    case "play":
+                    case "play"://play desde la lista de archivos
                         if (commands.length >= 2) {
 
                             String file = msg.split("\"")[1];
@@ -149,7 +170,7 @@ public class ServirDirectorios extends Thread {
                         }
                         break;
 
-                    case "play_fm":
+                    case "play_fm"://play desde la lista de musica
                         if (commands.length >= 2) {
 
                             String file = msg.split("\"")[1];
@@ -160,7 +181,8 @@ public class ServirDirectorios extends Thread {
                             out.write(("Error" + "\n").getBytes(Charset.forName("UTF-8")));
                         }
                         break;
-                    case "play_fr":
+
+                    case "play_fr"://play desde la lista de reproduccion
 
                         if (commands.length >= 2) {
                             String file = ma.getSongName(Integer.parseInt(msg.split("\"")[1]));
@@ -179,15 +201,14 @@ public class ServirDirectorios extends Thread {
 
                         break;
 
-                    case "stop":
+                    case "stop"://se para la reproduccion
 
                         ma.stop_();
-
 
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
-                    case "add":
+                    case "add"://añadir una cancion a la lista de reproduccion
                         if (commands.length >= 2) {
                             String song = msg.split("\"")[1];
                             String ruta = fs.getAbsolutePath(song);
@@ -199,7 +220,7 @@ public class ServirDirectorios extends Thread {
                         }
                         break;
 
-                    case "add_fm":
+                    case "add_fm"://añade una cancion desde la lista de musica
 
                         String song = msg.split("\"")[1];
                         ma.addSong(song);
@@ -207,7 +228,7 @@ public class ServirDirectorios extends Thread {
                         break;
 
 
-                    case "delete":
+                    case "delete"://borra una cancion desde la lista de reproduccion
 
                         if (commands.length >= 2) {
 
@@ -230,7 +251,7 @@ public class ServirDirectorios extends Thread {
 
                         break;
 
-                    case "repeat":
+                    case "repeat"://indica si hacer reproduccion continua o no
 
                         String rep = msg.split("\"")[1];
                         if (rep.equals("true")) {
@@ -243,7 +264,7 @@ public class ServirDirectorios extends Thread {
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
-                    case "shuffle":
+                    case "shuffle"://indica si hacer reproduccion aleatoria o no
 
                         String ran = msg.split("\"")[1];
                         if (ran.equals("true")) {
@@ -257,32 +278,33 @@ public class ServirDirectorios extends Thread {
 
                         break;
 
-                    case "exit":
+                    case "exit"://elimina la conexion
                         if (ma != null) {
                             ma.kill();
                             gui.out("[EXIT]");
                         }
                         break;
 
-                    case "next":
+                    case "next"://siguiente cancion
                         gui.out("[NEXT] Reproduciendo la siguiente canción.");
                         ma.next();
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
-                    case "prev":
+                    case "prev"://anterior cancion
                         gui.out("[PREV] Reproduciendo la canción anterior.");
                         ma.previous();
                         out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
 
-                    default:
+                    default://si no conprendemos el mensaje
                         out.write((NOK + "\n").getBytes(Charset.forName("UTF-8")));
                         break;
                 }
 
             }
 
+            //cerrar la conexion
             sck.close();
             socket.close();
             if (ma != null) {
@@ -297,6 +319,9 @@ public class ServirDirectorios extends Thread {
 
     }
 
+    /**
+     * Iniciar conexion automatica por udp
+     */
     public void initUDPBroadcast() {
         if (udp == null) {
             udp = new UDPBroadcast();
@@ -305,6 +330,9 @@ public class ServirDirectorios extends Thread {
         }
     }
 
+    /**
+     * Detener conexion automatica por udp
+     */
     public void stopUDPBroadcast() {
         if (udp != null) {
             udp.stopListening();
