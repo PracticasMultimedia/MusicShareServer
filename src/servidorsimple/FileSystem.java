@@ -138,7 +138,6 @@ public class FileSystem {
                 }
             }
         } catch (java.lang.NullPointerException ex) {
-            System.out.println("NullpointerException... ???");
         }
         return childs;
     }

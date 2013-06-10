@@ -55,7 +55,6 @@ public class Connect extends Thread {
      * @param s string para imprimir por consola
      */
     private void out(String s) {
-        System.out.println(s);
     }
 
     /**
@@ -190,7 +189,6 @@ public class Connect extends Thread {
                                 out.write(("Error" + "\n").getBytes(Charset.forName("UTF-8")));
                             } else {
                                 gui.out("[PLAY] Reproduciendo " + file);
-                                System.out.println("Parseint: " + Integer.parseInt(msg.split("\"")[1]));
                                 ma.selectSong(Integer.parseInt(msg.split("\"")[1]));
 
                                 out.write((OK + "\n").getBytes(Charset.forName("UTF-8")));
@@ -313,7 +311,6 @@ public class Connect extends Thread {
 
 
         } catch (IOException ex) {
-            System.out.println("Error: " + ex.getMessage());
             ma.kill();
         }
 
@@ -336,7 +333,6 @@ public class Connect extends Thread {
     public void stopUDPBroadcast() {
         if (udp != null) {
             udp.stopListening();
-            System.out.println("StopUDP" + udp);
             udp = null;
             gui.out("[UDP] Escucha de Conexiones Directas detenida.");
         }

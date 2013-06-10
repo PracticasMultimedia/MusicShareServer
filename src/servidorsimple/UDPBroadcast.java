@@ -39,10 +39,8 @@ public class UDPBroadcast extends Thread {
             
             while (listen) {
                 DatagramPacket pckRecibido = new DatagramPacket(datosRecibidos, datosRecibidos.length);
-                System.out.println("esperando paquetes <-");
                 sckServidor.receive(pckRecibido);
                 String mensaje = new String(pckRecibido.getData());
-                System.out.println("RECEIVED: " + mensaje);
                 InetAddress IPAddress = pckRecibido.getAddress();
                 int port = pckRecibido.getPort();
                 

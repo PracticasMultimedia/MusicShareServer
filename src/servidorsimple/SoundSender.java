@@ -345,25 +345,16 @@ public class SoundSender extends Thread {
             socket_control = new Socket();
             socket_datos = new Socket();
 
-            System.out.println("Esperando una conexión:");
-
             socket_control = serv_control.accept();
             socket_datos = serv_datos.accept();
 
 //Inicia el socket, ahora esta esperando una conexión por parte del cliente
-
-            System.out.println("Un cliente se ha conectado.");
-
-
-
 //Canales de entrada y salida de datos
 
             entrada = new BufferedReader(new InputStreamReader(socket_control.getInputStream()));
 
             out_control = new DataOutputStream(socket_control.getOutputStream());
             out_datos = new DataOutputStream(socket_datos.getOutputStream());
-
-            System.out.println("Confirmando conexion al cliente....");
 
             while (salir == false) {
 
@@ -380,8 +371,6 @@ public class SoundSender extends Thread {
 
                 //si es nula detemos la reproduccion
                 if (newSong != null) {
-
-                    System.out.println("Reproduciendo: " + newSong);
 
                     // Create a Xuggler container object
                     container = IContainer.make();
@@ -574,9 +563,6 @@ public class SoundSender extends Thread {
                 } catch (IOException ex) {
                 }
             }
-
-            System.out.println("Error: " + e.getMessage());
-
         }
 
     }
