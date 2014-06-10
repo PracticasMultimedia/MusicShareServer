@@ -497,7 +497,7 @@ public class SoundSender extends Thread {
                                     //solo usamos los primeros 7 grupos, ya que los demas no tienen informacion que nos interese
                                     for (int i = 0; i < 7; i++) {
                                         for (int j = 0; j < corte; j++) {
-                                            bandas[i] = Math.abs(fft.getBand(i * corte + j));
+                                            bandas[i] += Math.abs(fft.getBand(i * corte + j));
                                         }
                                     }
 
@@ -509,7 +509,7 @@ public class SoundSender extends Thread {
                                         bandasString += bandas[i] + ";";
 
                                     }
-
+                                    
                                     //enviamos el tamaño del paquete, los coeficientes de fft y los datos en bruto de audio
                                     out_control.write((samples.getSize() + "\n").getBytes(Charset.forName("UTF-8")));
                                     out_control.write((bandasString + "\n").getBytes(Charset.forName("UTF-8")));
